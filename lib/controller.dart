@@ -723,8 +723,23 @@ class MusicController extends ChangeNotifier {
   Future<void> _scheduleRecap() async {
     try {
       tzdata.initializeTimeZones();
-      final tzInfo = await FlutterTimezone.getLocalTimezone();
-      tz.setLocalLocation(tz.getLocation(tzInfo.name));
+      final tzRes = await FlutterTimezone.getLocalTimezone();
+      String tzName;
+      if (tzRes is String) {
+        tzName = tzRes;
+      } else {
+        // Try common property names, fall back to toString()
+        tzName = (tzRes as dynamic).value ??
+            (tzRes as dynamic).timezone ??
+            (tzRes as dynamic).timeZone ??
+            (tzRes as dynamic).location ??
+            tzRes.toString();
+      }
+      try {
+        tz.setLocalLocation(tz.getLocation(tzName));
+      } catch (e) {
+        debugPrint('Could not set local timezone from $tzName: $e');
+      }
       final now = tz.TZDateTime.now(tz.local);
       var next = tz.TZDateTime(tz.local, now.year, now.month, now.day, 9);
       var days = (8 - now.weekday) % 7;
