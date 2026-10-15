@@ -735,6 +735,7 @@ class MusicController extends ChangeNotifier {
         'You played $weekPlays tracks this week. Tap for your mix.',
         next,
         const NotificationDetails(android: AndroidNotificationDetails('recap', 'Weekly recap')),
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       );
     } catch (e) {
