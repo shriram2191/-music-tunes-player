@@ -47,8 +47,171 @@ class MusicTunesApp extends StatelessWidget {
           colorScheme: const ColorScheme.dark(primary: violet, secondary: cyan, surface: panel),
           useMaterial3: true,
         ),
-        home: const MusicHome(),
+        home: const AnimatedSplashScreen(),
       );
+}
+
+class AnimatedSplashScreen extends StatefulWidget {
+  const AnimatedSplashScreen({super.key});
+
+  @override
+  State<AnimatedSplashScreen> createState() => _AnimatedSplashScreenState();
+}
+
+class _AnimatedSplashScreenState extends State<AnimatedSplashScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scale;
+  late final Animation<double> _fade;
+  Timer? _navigationTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1700),
+    );
+    _scale = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutBack,
+    );
+    _fade = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.0, 0.72, curve: Curves.easeIn),
+    );
+    _controller.forward();
+    _navigationTimer = Timer(const Duration(milliseconds: 2450), () {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder<void>(
+          pageBuilder: (_, __, ___) => const MusicHome(),
+          transitionDuration: const Duration(milliseconds: 450),
+          transitionsBuilder: (_, animation, __, child) => FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _navigationTimer?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: bg,
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment(0, -0.12),
+            radius: 0.9,
+            colors: [Color(0xFF202044), bg],
+          ),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.19,
+              child: Container(
+                width: 250,
+                height: 250,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: cyan.withValues(alpha: 0.12), width: 1.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: violet.withValues(alpha: 0.16),
+                      blurRadius: 75,
+                      spreadRadius: 18,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            FadeTransition(
+              opacity: _fade,
+              child: ScaleTransition(
+                scale: _scale,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(36),
+                        border: Border.all(color: cyan.withValues(alpha: 0.35), width: 1.2),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF252044), Color(0xFF101A24)],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: cyan.withValues(alpha: 0.20),
+                            blurRadius: 36,
+                            spreadRadius: 2,
+                          ),
+                          BoxShadow(
+                            color: violet.withValues(alpha: 0.20),
+                            blurRadius: 50,
+                            spreadRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        'assets/brand/music_tunes_logo.png',
+                        width: 190,
+                        height: 190,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'MUSIC TUNES',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 4.2,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 9),
+                    const Text(
+                      'YOUR SOUND. YOUR WORLD.',
+                      style: TextStyle(
+                        fontSize: 10,
+                        letterSpacing: 3.0,
+                        fontWeight: FontWeight.w700,
+                        color: cyan,
+                      ),
+                    ),
+                    const SizedBox(height: 34),
+                    const SizedBox(
+                      width: 25,
+                      height: 25,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        valueColor: AlwaysStoppedAnimation<Color>(cyan),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 void _snack(BuildContext context, String msg) =>
