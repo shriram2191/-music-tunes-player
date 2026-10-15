@@ -10,12 +10,15 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        // Use Java 1.8 compatibility for desugaring support
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        // enable core library desugaring for libraries that use newer JDK APIs
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 
     sourceSets {
@@ -44,4 +47,6 @@ flutter {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    // core library desugaring to support newer JDK APIs used by some AARs (e.g. flutter_local_notifications)
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }
