@@ -70,27 +70,22 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1700),
+      duration: const Duration(milliseconds: 1500),
     );
-    _scale = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutBack,
-    );
+    _scale = CurvedAnimation(parent: _controller, curve: Curves.easeOutBack);
     _fade = CurvedAnimation(
       parent: _controller,
       curve: const Interval(0.0, 0.72, curve: Curves.easeIn),
     );
     _controller.forward();
-    _navigationTimer = Timer(const Duration(milliseconds: 2450), () {
+    _navigationTimer = Timer(const Duration(milliseconds: 2200), () {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
         PageRouteBuilder<void>(
           pageBuilder: (_, __, ___) => const MusicHome(),
-          transitionDuration: const Duration(milliseconds: 450),
-          transitionsBuilder: (_, animation, __, child) => FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
+          transitionDuration: const Duration(milliseconds: 400),
+          transitionsBuilder: (_, animation, __, child) =>
+              FadeTransition(opacity: animation, child: child),
         ),
       );
     });
@@ -107,107 +102,139 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bg,
-      body: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(0, -0.12),
-            radius: 0.9,
-            colors: [Color(0xFF202044), bg],
-          ),
-        ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.19,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final shortest = constraints.maxWidth;
+            final logoSize = (shortest * 0.52).clamp(140.0, 220.0);
+            return SizedBox(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
               child: Container(
-                width: 250,
-                height: 250,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: cyan.withValues(alpha: 0.12), width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: violet.withValues(alpha: 0.16),
-                      blurRadius: 75,
-                      spreadRadius: 18,
-                    ),
-                  ],
+                decoration: const BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment(0, -0.12),
+                    radius: 0.9,
+                    colors: [Color(0xFF202044), bg],
+                  ),
                 ),
-              ),
-            ),
-            FadeTransition(
-              opacity: _fade,
-              child: ScaleTransition(
-                scale: _scale,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(36),
-                        border: Border.all(color: cyan.withValues(alpha: 0.35), width: 1.2),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF252044), Color(0xFF101A24)],
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: Center(
+                          child: Container(
+                            width: constraints.maxWidth * 0.76,
+                            height: constraints.maxWidth * 0.76,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: cyan.withValues(alpha: 0.12),
+                                width: 1.5,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: violet.withValues(alpha: 0.13),
+                                  blurRadius: 55,
+                                  spreadRadius: 8,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: cyan.withValues(alpha: 0.20),
-                            blurRadius: 36,
-                            spreadRadius: 2,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                      child: FadeTransition(
+                        opacity: _fade,
+                        child: ScaleTransition(
+                          scale: _scale,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    color: cyan.withValues(alpha: 0.30),
+                                    width: 1.2,
+                                  ),
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [Color(0xFF252044), Color(0xFF101A24)],
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: cyan.withValues(alpha: 0.16),
+                                      blurRadius: 28,
+                                      spreadRadius: 1,
+                                    ),
+                                    BoxShadow(
+                                      color: violet.withValues(alpha: 0.17),
+                                      blurRadius: 36,
+                                      spreadRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                                child: Image.asset(
+                                  'assets/brand/music_tunes_logo.png',
+                                  width: logoSize,
+                                  height: logoSize,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              const FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  'MUSIC TUNES',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 4.2,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              const FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  'YOUR SOUND. YOUR WORLD.',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    letterSpacing: 3.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: cyan,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 28),
+                              const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.4,
+                                  valueColor: AlwaysStoppedAnimation<Color>(cyan),
+                                ),
+                              ),
+                            ],
                           ),
-                          BoxShadow(
-                            color: violet.withValues(alpha: 0.20),
-                            blurRadius: 50,
-                            spreadRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(
-                        'assets/brand/music_tunes_logo.png',
-                        width: 190,
-                        height: 190,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    const Text(
-                      'MUSIC TUNES',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 4.2,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 9),
-                    const Text(
-                      'YOUR SOUND. YOUR WORLD.',
-                      style: TextStyle(
-                        fontSize: 10,
-                        letterSpacing: 3.0,
-                        fontWeight: FontWeight.w700,
-                        color: cyan,
-                      ),
-                    ),
-                    const SizedBox(height: 34),
-                    const SizedBox(
-                      width: 25,
-                      height: 25,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.4,
-                        valueColor: AlwaysStoppedAnimation<Color>(cyan),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
