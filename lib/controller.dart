@@ -723,7 +723,9 @@ class MusicController extends ChangeNotifier {
   Future<void> _scheduleRecap() async {
     try {
       tzdata.initializeTimeZones();
-      tz.setLocalLocation(tz.getLocation(await FlutterTimezone.getLocalTimezone()));
+-      tz.setLocalLocation(tz.getLocation(await FlutterTimezone.getLocalTimezone()));
++      final tzInfo = await FlutterTimezone.getLocalTimezone();
++      tz.setLocalLocation(tz.getLocation(tzInfo.name));
       final now = tz.TZDateTime.now(tz.local);
       var next = tz.TZDateTime(tz.local, now.year, now.month, now.day, 9);
       var days = (8 - now.weekday) % 7;
