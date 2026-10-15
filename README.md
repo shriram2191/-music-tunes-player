@@ -1,33 +1,37 @@
-# Music Tunes — Play Store preparation starter
+# Music Tunes — free music streaming & player
 
-This is a Flutter starter branded **Music Tunes**, using the selected bright logo artwork and an AMOLED-style UI. It intentionally contains no advertising SDK dependencies.
+AMOLED-style Flutter music player with free online streaming (no signup),
+regional charts, offline playback, and an ad-supported free tier.
 
-## Important: not release-ready yet
-The project is not a complete music service and no APK/AAB has been built. Online music catalogue integration, reliable background playback/notification controls, persistent playlists/queue, and real equalizer processing still need implementation and tests. A legitimate provider and the right streaming permissions are required for online music.
+## Features
+- **Stream free** — millions of tracks via Audius (Internet Archive fallback), no account needed
+- **Country & language** — pin one or more markets (auto-detected on first run), regional chart rows
+- **Your library** — plays local audio files too, with search
+- **Offline playback** — cache online tracks and play them with no connection
+- **Background playback** — notification & lock-screen controls
+- **Real equalizer** — presets + per-band sliders, persisted
+- **Sleep timer, playlists, favourites, recently played, queue** — all saved on device
+- **Made for you today** — auto daily mix from your listening
+- **Weekly recap notification** — "You played N tracks this week"
+- **AdMob banner** on the Online tab (test IDs included — replace before release)
 
-## Files
-- `lib/main.dart` — starter UI and playback code
-- `assets/brand/music_tunes_logo.png` — selected bright logo design source
-- `android/app/src/main/AndroidManifest.xml` — starter manifest; generated Android scaffolding is still required
-- `PLAY_STORE_CHECKLIST.md` — release checklist and draft store description
-
-## Build environment
-Install Flutter stable, Android Studio, and Android SDK. From the project directory run:
+## Build
+Install Flutter stable + Android SDK, then from the project directory:
 
 ```sh
 flutter create .
 flutter pub get
 flutter analyze
-flutter test
 flutter run
 ```
 
-Review the generated Android files, set a unique application ID in Gradle, create proper launcher/adaptive icons from the supplied logo, and test on devices. Once the unfinished features are implemented and tests pass:
+Or push to GitHub and use the **Build Android APK** workflow (Actions tab).
+The APK from CI is a debug build for testing on your phone.
 
-```sh
-flutter build appbundle --release
-```
+## Before Play release
+- Replace AdMob **test IDs** in `AndroidManifest.xml` (App ID) and `lib/ads.dart` (banner unit)
+- Set a unique `applicationId` in `android/app/build.gradle`
+- Generate launcher icons from `assets/brand/music_tunes_logo.png`
+- Build a signed release AAB (`flutter build appbundle --release`) and complete Play declarations
 
-Expected output: `build/app/outputs/bundle/release/app-release.aab`. This output will not be produced until you run the build in an installed Flutter/Android environment.
-
-Read `PLAY_STORE_CHECKLIST.md` before submitting.
+See `PLAY_STORE_CHECKLIST.md` and `ONLINE_MUSIC.md`.

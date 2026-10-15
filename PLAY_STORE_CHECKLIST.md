@@ -28,6 +28,6 @@ This package is a Flutter starter, not a release build. It has not been compiled
 ## Store listing draft
 **Short description (draft):** An ad-free music player for your phone’s music library, with playlists and favourites.
 
-**Full description (draft — update after implementation):** Music Tunes is an AMOLED-style music player designed for listening to audio stored on your device. Organise tracks, search your library, create playlists, save favourites, and control playback. Online music will be offered only through supported, authorised music providers. No ads are included. Feature availability may depend on device support and the final online provider integration.
+**Full description (draft — update after implementation):** Music Tunes is an AMOLED-style music player designed for listening to audio stored on your device. Organise tracks, search your library, create playlists, save favourites, and control playback. Online music will be offered only through supported, authorised music providers. Free to stream, supported by unobtrusive ads on the Online tab. Feature availability may depend on device support and the final online provider integration.
 
 Do not publish claims about online streaming, equalizer, or background playback until each feature is implemented and verified.
